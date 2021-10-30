@@ -31,7 +31,6 @@ router.post(
     .withMessage('password must be at least 6 characters long'),
   body('role')
     .custom((value) => {
-      console.log(Role.isValidRole(value));
       return Role.isValidRole(value);
     })
     .withMessage(

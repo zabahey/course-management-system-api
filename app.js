@@ -7,6 +7,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const userRoutes = require('./api/routes/user');
+const courseRoutes = require('./api/routes/course');
 
 mongoose.connect(process.env.MONGO_ATLAS_URL);
 
@@ -24,6 +25,7 @@ app.use(
 );
 
 app.use('/user', userRoutes);
+app.use('/courses', courseRoutes);
 
 app.use((req, res, next) => {
   const error = new Error('Not found');
