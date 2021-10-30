@@ -20,12 +20,12 @@ router.get('/', CoursesController.getCourses);
 router.post(
   '/',
   authenticate,
+  authorize(Role.Instructor),
   (req, res, next) => {
     res.status(401).json({
       message: 'create course',
     });
   }
-  // authorize(Role.Instructor),
   // awsImageService.upload.single('image'),
   // body('name').notEmpty().withMessage('Name is required'),
   // body('description').notEmpty().withMessage('Description is required'),
