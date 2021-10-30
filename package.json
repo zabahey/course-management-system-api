@@ -1,0 +1,20 @@
+{
+  "name": "course-management-api",
+  "version": "1.0.0",
+  "description": "Course management system api",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devstart": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "author": "Parinya Samrongsap",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.14"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  }
+}
