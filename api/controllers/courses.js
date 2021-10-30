@@ -1,5 +1,50 @@
 const mongoose = require('mongoose');
 const Course = require('../models/course');
+const UserProfile = require('../models/userProfile');
+
+exports.getCourses = async (req, res, next) => {
+  const courses = await Course.aggregate([
+    {
+      $lookup: {
+        from: 'userprofiles',
+        localField: 'instructor',
+        foreignField: 'user',
+        as: 'courseInstructor',
+      },
+    },
+    {
+      $project: {
+        name: '$name',
+        description: '$description',
+        category: '$category',
+        subject: '$subject',
+        startDate: '$startDate',
+        endDate: '$endDate',
+        numberOfStudent: '$numberOfStudent',
+        instructor: {
+          $arrayElemAt: [
+            {
+              $map: {
+                input: '$courseInstructor',
+                in: {
+                  firstName: '$$this.firstName',
+                  lastName: '$$this.lastName',
+                  nickName: '$$this.nickName',
+                },
+              },
+            },
+            0,
+          ],
+        },
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    code: 200,
+    data: courses,
+  });
+};
 
 exports.createNewCourse = async (req, res, next) => {
   const { sub: userId } = req.user;

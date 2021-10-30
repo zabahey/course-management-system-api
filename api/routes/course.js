@@ -13,9 +13,10 @@ const Role = require('../models/role');
 
 const awsImageService = require('../services/aws-image');
 
+router.get('/', CoursesController.getCourses);
+
 router.post(
   '/',
-  authenticate,
   authorize(Role.Instructor),
   awsImageService.upload.single('image'),
   body('name').notEmpty().withMessage('Name is required'),
