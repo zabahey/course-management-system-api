@@ -77,6 +77,34 @@ exports.login = async (req, res, next) => {
   }
 };
 
+exports.getUserProfile = async (req, res, next) => {
+  const { sub } = req.user;
+
+  const userProfiles = await UserProfile.find({ user: sub }).select(
+    'firstName lastName gender nickName birthday'
+  );
+
+  if (userProfiles.length < 1) {
+    return res.status(404).json({
+      code: 404,
+      message: 'User not found',
+    });
+  }
+
+  const currentUserProfile = userProfiles[0];
+
+  res.status(200).json({
+    code: 200,
+    data: {
+      firstName: currentUserProfile.firstName,
+      lastName: currentUserProfile.lastName,
+      gender: currentUserProfile.gender,
+      nickName: currentUserProfile.nickName,
+      birthday: new Date(currentUserProfile.birthday).getTime(),
+    },
+  });
+};
+
 exports.updateUserProfile = async (req, res, next) => {
   const { sub } = req.user;
 

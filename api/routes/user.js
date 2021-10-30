@@ -49,6 +49,8 @@ router.post(
   UserController.login
 );
 
+router.get('/profile', authenticate, UserController.getUserProfile);
+
 router.patch(
   '/profile',
   authenticate,
