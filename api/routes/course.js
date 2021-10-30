@@ -19,6 +19,7 @@ router.get('/', CoursesController.getCourses);
 
 router.get(
   '/:id',
+  authenticate,
   param('id')
     .custom((value) => {
       console.log(ObjectId.isValid(value));
@@ -31,6 +32,7 @@ router.get(
 
 router.post(
   '/',
+  authenticate,
   authorize(Role.Instructor),
   awsImageService.upload.single('image'),
   body('name').notEmpty().withMessage('Name is required'),

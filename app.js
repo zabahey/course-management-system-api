@@ -6,7 +6,6 @@ const morgan = require('morgan');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
-const authenticate = require('./api/middleware/authenticate');
 const userRoutes = require('./api/routes/user');
 const courseRoutes = require('./api/routes/course');
 
@@ -26,7 +25,7 @@ app.use(
 );
 
 app.use('/user', userRoutes);
-app.use('/courses', authenticate, courseRoutes);
+app.use('/courses', courseRoutes);
 
 app.use((req, res, next) => {
   const error = new Error('Not found');
