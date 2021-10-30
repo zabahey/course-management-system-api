@@ -3,7 +3,26 @@ const Course = require('../models/course');
 const UserProfile = require('../models/userProfile');
 
 exports.getCourses = async (req, res, next) => {
+  const { name, start, end } = req.query;
+
+  const minDate = new Date(-8640000000000000);
+  const maxDate = new Date(8640000000000000);
+  const filterName = name ? name : '';
+  const endDate = new Date(+end);
+
+  const filterEndDate = isNaN(endDate) ? maxDate : endDate;
+  const startDate = new Date(+start);
+
+  const filterStartDate = isNaN(startDate) ? minDate : startDate;
+
   const courses = await Course.aggregate([
+    {
+      $match: {
+        name: { $regex: filterName, $options: 'i' },
+        startDate: { $gte: filterStartDate },
+        endDate: { $lte: filterEndDate },
+      },
+    },
     {
       $lookup: {
         from: 'userprofiles',
