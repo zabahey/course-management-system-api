@@ -14,13 +14,17 @@ const authorize = (roles) => {
           .map((role) => role.toLowerCase())
           .includes(req.user.role.toLowerCase())
       ) {
+        req.end();
         // user's role is not authorized
-        return res.status(401).json({
-          error: {
-            code: 401,
-            message: 'UnAuthorized',
-          },
-        }).end();
+        return res
+          .status(401)
+          .json({
+            error: {
+              code: 401,
+              message: 'UnAuthorized',
+            },
+          })
+          .end();
       }
 
       // authentication and authorization successful
