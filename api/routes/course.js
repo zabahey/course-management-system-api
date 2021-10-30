@@ -15,13 +15,13 @@ const Role = require('../models/role');
 
 const awsImageService = require('../services/aws-image');
 
-router.get('/', CoursesController.getCourses);
+router.get('/', authenticate, CoursesController.getCourses);
 
-router.post('/', (req,res,next) => {
+router.post('/', (req, res, next) => {
   res.status(200).json({
-    message: 'test'
-  })
-})
+    message: 'test',
+  });
+});
 
 // router.post(
 //   '/',
