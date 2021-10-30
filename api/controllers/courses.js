@@ -119,45 +119,46 @@ exports.getCourseById = async (req, res, next) => {
 };
 
 exports.createNewCourse = async (req, res, next) => {
-  const { sub: userId } = req.user;
-  const {
-    name,
-    description,
-    category,
-    subject,
-    startDate,
-    endDate,
-    numberOfStudent,
-  } = req.body;
-
-  if (!req.file) {
-    return res.status(400).json({
-      error: {
-        code: 400,
-        errors: [
-          {
-            msg: 'Course image is required',
-            param: 'image',
-            location: 'body',
-          },
-        ],
-      },
-    });
-  }
-
-  const course = new Course({
-    _id: new mongoose.Types.ObjectId(),
-    name,
-    description,
-    category,
-    subject,
-    startDate: new Date(+startDate),
-    endDate: new Date(+endDate),
-    numberOfStudent,
-    image: req.file.location,
-    instructor: userId,
-  });
   try {
+    const { sub: userId } = req.user;
+    const {
+      name,
+      description,
+      category,
+      subject,
+      startDate,
+      endDate,
+      numberOfStudent,
+    } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({
+        error: {
+          code: 400,
+          errors: [
+            {
+              msg: 'Course image is required',
+              param: 'image',
+              location: 'body',
+            },
+          ],
+        },
+      });
+    }
+
+    const course = new Course({
+      _id: new mongoose.Types.ObjectId(),
+      name,
+      description,
+      category,
+      subject,
+      startDate: new Date(+startDate),
+      endDate: new Date(+endDate),
+      numberOfStudent,
+      image: req.file.location,
+      instructor: userId,
+    });
+
     const newCourse = await course.save();
     res.status(201).json({
       code: 201,
