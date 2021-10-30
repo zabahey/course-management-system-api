@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+
+const User = require('../models/user');
+const UserProfile = require('../models/userProfile');
 
 const salt = +process.env.BCRYPT_SALT_OR_ROUND;
 
@@ -66,6 +68,54 @@ exports.login = async (req, res, next) => {
     res.status(200).json({
       coed: 200,
       token,
+    });
+  } catch (error) {
+    res.status(500).json({
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
+exports.updateUserProfile = async (req, res, next) => {
+  const { sub } = req.user;
+
+  const users = await User.find({ _id: sub });
+
+  if (users.length < 1) {
+    return res.status(404).json({
+      code: 404,
+      message: 'User not found',
+    });
+  }
+
+  const updateOps = {};
+
+  for (const key in req.body) {
+    const value = req.body[key];
+    if (value != null) {
+      if (key === 'birthday') {
+        updateOps[key] = new Date(value);
+      } else {
+        updateOps[key] = req.body[key];
+      }
+    }
+  }
+
+  try {
+    const result = await UserProfile.updateOne(
+      {
+        user: sub,
+      },
+      {
+        $set: updateOps,
+      },
+      { upsert: true, runValidators: true }
+    );
+
+    res.status(200).json({
+      code: 200,
+      message: 'User profile updated',
     });
   } catch (error) {
     res.status(500).json({

@@ -10,7 +10,11 @@ const userRoutes = require('./api/routes/user');
 
 mongoose.connect(process.env.MONGO_ATLAS_URL);
 
-app.use(cors());
+app.use(
+  cors({
+    methods: ['GET', 'POST', 'DELETE', 'PATCH'],
+  })
+);
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(
