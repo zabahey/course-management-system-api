@@ -19,9 +19,12 @@ exports.signup = async (req, res, next) => {
     });
     const newUser = await user.save();
     res.status(201).json({
+      code: 201,
+      data: {
+        username: newUser.username,
+        id: newUser._id,
+      },
       message: 'New user created',
-      username: newUser.username,
-      id: newUser._id,
     });
   } catch (error) {
     res.status(500).json({
@@ -67,7 +70,9 @@ exports.login = async (req, res, next) => {
     );
     res.status(200).json({
       coed: 200,
-      token,
+      data: {
+        token,
+      },
     });
   } catch (error) {
     res.status(500).json({
