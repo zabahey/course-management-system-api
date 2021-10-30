@@ -90,9 +90,15 @@ exports.getUserProfile = async (req, res, next) => {
   );
 
   if (userProfiles.length < 1) {
-    return res.status(404).json({
-      code: 404,
-      message: 'User not found',
+    return res.status(200).json({
+      code: 200,
+      data: {
+        firstName: '',
+        lastName: '',
+        gender: '',
+        nickName: '',
+        birthday: new Date().getTime(),
+      },
     });
   }
 
