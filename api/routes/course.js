@@ -17,19 +17,6 @@ const awsImageService = require('../services/aws-image');
 
 router.get('/', CoursesController.getCourses);
 
-router.get(
-  '/:id',
-  authenticate,
-  param('id')
-    .custom((value) => {
-      console.log(ObjectId.isValid(value));
-      return ObjectId.isValid(value);
-    })
-    .withMessage('Provided id is in incorrect format'),
-  validateClientError,
-  CoursesController.getCourseById
-);
-
 router.post(
   '/',
   authenticate,
@@ -79,6 +66,19 @@ router.post(
   deleteImageWhenClientError,
   validateClientError,
   CoursesController.createNewCourse
+);
+
+router.get(
+  '/:id',
+  authenticate,
+  param('id')
+    .custom((value) => {
+      console.log(ObjectId.isValid(value));
+      return ObjectId.isValid(value);
+    })
+    .withMessage('Provided id is in incorrect format'),
+  validateClientError,
+  CoursesController.getCourseById
 );
 
 module.exports = router;
