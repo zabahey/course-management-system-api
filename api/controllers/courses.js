@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const Course = require('../models/course');
-const UserProfile = require('../models/userProfile');
 
 exports.getCourses = async (req, res, next) => {
   const { name, start, end } = req.query;
@@ -62,6 +62,57 @@ exports.getCourses = async (req, res, next) => {
   res.status(200).json({
     code: 200,
     data: courses,
+  });
+};
+
+exports.getCourseById = async (req, res, next) => {
+  const { id } = req.params;
+
+  const courses = await Course.aggregate([
+    {
+      $match: {
+        _id: ObjectId(id),
+      },
+    },
+    {
+      $lookup: {
+        from: 'userprofiles',
+        localField: 'instructor',
+        foreignField: 'user',
+        as: 'courseInstructor',
+      },
+    },
+    {
+      $project: {
+        name: '$name',
+        description: '$description',
+        category: '$category',
+        subject: '$subject',
+        startDate: '$startDate',
+        endDate: '$endDate',
+        numberOfStudent: '$numberOfStudent',
+        instructor: {
+          $arrayElemAt: [
+            {
+              $map: {
+                input: '$courseInstructor',
+                in: {
+                  firstName: '$$this.firstName',
+                  lastName: '$$this.lastName',
+                  nickName: '$$this.nickName',
+                },
+              },
+            },
+            0,
+          ],
+        },
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    code: 200,
+    data: courses && courses.length < 1 ? null : courses[0],
   });
 };
 

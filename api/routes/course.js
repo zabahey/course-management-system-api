@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
-const { body, check } = require('express-validator');
+const { body, param } = require('express-validator');
 
 const validateClientError = require('../middleware/validate-client-error');
 const deleteImageWhenClientError = require('../middleware/delete-image-client-error');
@@ -14,6 +16,18 @@ const Role = require('../models/role');
 const awsImageService = require('../services/aws-image');
 
 router.get('/', CoursesController.getCourses);
+
+router.get(
+  '/:id',
+  param('id')
+    .custom((value) => {
+      console.log(ObjectId.isValid(value));
+      return ObjectId.isValid(value);
+    })
+    .withMessage('Provided id is in incorrect format'),
+  validateClientError,
+  CoursesController.getCourseById
+);
 
 router.post(
   '/',
