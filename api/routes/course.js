@@ -14,8 +14,11 @@ const CoursesController = require('../controllers/courses');
 const Role = require('../models/role');
 
 const awsImageService = require('../services/aws-image');
+const { json } = require('express');
 
 router.get('/', authenticate, CoursesController.getCourses);
+
+const upload = awsImageService.upload.single('image');
 
 router.post(
   '/',
