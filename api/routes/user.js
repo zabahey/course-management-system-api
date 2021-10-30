@@ -7,6 +7,7 @@ const router = express.Router();
 const User = require('../models/user');
 const Role = require('../models/role');
 const UserController = require('../controllers/user');
+const validateClientError = require('../middleware/validate-client-error');
 
 router.post(
   '/signup',
@@ -33,7 +34,16 @@ router.post(
     .withMessage(
       `Invalid role, only ${Role.Student} and ${Role.Instructor} is allowed!`
     ),
+    validateClientError,
   UserController.signup
+);
+
+router.post(
+  '/login',
+  body('username').notEmpty().withMessage('username is required'),
+  body('password').notEmpty().withMessage('password is required'),
+  validateClientError,
+  UserController.login
 );
 
 module.exports = router;

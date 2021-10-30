@@ -7,17 +7,6 @@ const salt = +process.env.BCRYPT_SALT_OR_ROUND;
 exports.signup = async (req, res, next) => {
   const { username, password, role } = req.body;
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        error: {
-          code: 400,
-          errors: errors.array(),
-          message: 'Signup user failed',
-        },
-      });
-    }
-
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = new User({
       _id: new mongoose.Types.ObjectId(),
@@ -37,4 +26,10 @@ exports.signup = async (req, res, next) => {
       message: error.message,
     });
   }
+};
+
+exports.login = async (req, res, next) => {
+  res.status(200).json({
+    message: 'login',
+  });
 };
