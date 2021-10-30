@@ -143,6 +143,8 @@ exports.createNewCourse = async (req, res, next) => {
     });
   }
 
+  console.log(req.file.location)
+
   const course = new Course({
     _id: new mongoose.Types.ObjectId(),
     name,
