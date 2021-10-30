@@ -19,8 +19,8 @@ router.get('/', CoursesController.getCourses);
 
 router.post(
   '/',
-  authenticate,
-  authorize(Role.Instructor),
+  //authenticate,
+  //authorize(Role.Instructor),
   (req, res, next) => {
     res.status(401).json({
       message: 'create course',
