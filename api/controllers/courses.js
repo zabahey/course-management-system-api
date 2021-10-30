@@ -39,6 +39,7 @@ exports.getCourses = async (req, res, next) => {
         subject: '$subject',
         startDate: '$startDate',
         endDate: '$endDate',
+        image: '$image',
         numberOfStudent: '$numberOfStudent',
         instructor: {
           $arrayElemAt: [
@@ -90,6 +91,7 @@ exports.getCourseById = async (req, res, next) => {
         subject: '$subject',
         startDate: '$startDate',
         endDate: '$endDate',
+        image: '$image',
         numberOfStudent: '$numberOfStudent',
         instructor: {
           $arrayElemAt: [
@@ -142,8 +144,6 @@ exports.createNewCourse = async (req, res, next) => {
       },
     });
   }
-
-  console.log(req.file.location)
 
   const course = new Course({
     _id: new mongoose.Types.ObjectId(),
