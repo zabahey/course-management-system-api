@@ -14,6 +14,7 @@ const authorize = (roles) => {
           .map((role) => role.toLowerCase())
           .includes(req.user.role.toLowerCase())
       ) {
+        req.destroy();
         // user's role is not authorized
         return res
           .status(401)
