@@ -2,8 +2,8 @@ const { body } = require('express-validator');
 
 const authenticate = require('./authenticate');
 const authorize = require('./authorize');
-const validateClientError = require('./validate-client-error');
-const deleteImageWhenClientError = require('./delete-image-client-error');
+const validateClientError = require('./validateClientError');
+const deleteImageWhenClientError = require('./deleteImageClientError');
 
 const awsImageService = require('../services/aws-image');
 

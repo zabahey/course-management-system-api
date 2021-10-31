@@ -9,7 +9,7 @@ const Role = require('../models/role');
 
 const UserController = require('../controllers/user');
 
-const validateClientError = require('../middleware/validate-client-error');
+const validateClientError = require('../middleware/validateClientError');
 const authenticate = require('../middleware/authenticate');
 
 router.post(

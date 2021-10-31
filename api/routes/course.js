@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 // middleware
-const validateClientError = require('../middleware/validate-client-error');
+const validateClientError = require('../middleware/validateClientError');
 const authenticate = require('../middleware/authenticate');
 const authorize = require('../middleware/authorize');
 const courseValidator = require('../middleware/courseValidator');
