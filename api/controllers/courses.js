@@ -171,3 +171,9 @@ exports.createNewCourse = async (req, res, next) => {
     });
   }
 };
+
+exports.deleteCourse = (req, res, next) => {
+  res.status(200).json({
+    message: 'Course deleted',
+  });
+};
