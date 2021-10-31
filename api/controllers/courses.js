@@ -157,6 +157,7 @@ exports.createNewCourse = async (req, res, next) => {
       endDate: new Date(+endDate),
       numberOfStudent,
       image: req.file.location,
+      imageKey: req.file.key,
       instructor: userId,
     });
 

@@ -19,6 +19,10 @@ const courseSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  imageKey: {
+    type: String,
+    required: true,
+  },
   subject: {
     type: String,
     required: true,
@@ -39,7 +43,7 @@ const courseSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
-  }
+  },
 });
 
 module.exports = mongoose.model('Course', courseSchema);
