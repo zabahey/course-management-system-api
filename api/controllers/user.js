@@ -8,7 +8,7 @@ const UserProfile = require('../models/userProfile');
 const salt = +process.env.BCRYPT_SALT_OR_ROUND;
 
 exports.signup = async (req, res, next) => {
-  const { username, password, role } = req.body;
+  const { username, password, role, firstName, lastName } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = new User({
@@ -26,6 +26,19 @@ exports.signup = async (req, res, next) => {
       },
       message: 'New user created',
     });
+
+    await UserProfile.updateOne(
+      {
+        user: newUser._id,
+      },
+      {
+        $set: {
+          firstName,
+          lastName,
+        },
+      },
+      { upsert: true, runValidators: true }
+    );
   } catch (error) {
     res.status(500).json({
       code: 500,

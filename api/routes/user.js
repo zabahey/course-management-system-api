@@ -14,6 +14,8 @@ const authenticate = require('../middleware/authenticate');
 
 router.post(
   '/signup',
+  body('firstName').notEmpty().withMessage('first name is required'),
+  body('lastName').notEmpty().withMessage('last name is required'),
   body('username')
     .notEmpty()
     .withMessage('username is required')
