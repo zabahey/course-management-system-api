@@ -14,6 +14,7 @@ exports.getCourses = async (req, res, next) => {
   const startDate = new Date(+start);
 
   const filterStartDate = isNaN(startDate) ? minDate : startDate;
+  const awsImageService = require('../services/aws-image');
 
   const courses = await Course.aggregate([
     {
@@ -172,8 +173,32 @@ exports.createNewCourse = async (req, res, next) => {
   }
 };
 
-exports.deleteCourse = (req, res, next) => {
-  res.status(200).json({
-    message: 'Course deleted',
-  });
+exports.deleteCourse = async (req, res, next) => {
+  const { sub: userId } = req.user;
+  const { id } = req.params;
+
+  try {
+    const filter = {
+      instructor: ObjectId(userId),
+      _id: ObjectId(id),
+    };
+
+    const result = await Course.deleteOne(filter);
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({
+        code: 404,
+        message: 'Course not found',
+      });
+    }
+
+    res.status(200).json({
+      message: 'Course deleted',
+    });
+  } catch (error) {
+    res.status(500).json({
+      code: 500,
+      message: error.message,
+    });
+  }
 };
