@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Course = require('../models/course');
 
+const awsImageService = require('../services/aws-image');
+
 exports.getCourses = async (req, res, next) => {
   const { name, start, end } = req.query;
 
@@ -14,7 +16,6 @@ exports.getCourses = async (req, res, next) => {
   const startDate = new Date(+start);
 
   const filterStartDate = isNaN(startDate) ? minDate : startDate;
-  const awsImageService = require('../services/aws-image');
 
   const courses = await Course.aggregate([
     {
@@ -184,6 +185,15 @@ exports.deleteCourse = async (req, res, next) => {
       _id: ObjectId(id),
     };
 
+    const course = await Course.findOne(filter);
+
+    if (!course) {
+      return res.status(404).json({
+        code: 404,
+        message: 'Course not found',
+      });
+    }
+    const imageKey = course.imageKey;
     const result = await Course.deleteOne(filter);
 
     if (result.deletedCount === 0) {
@@ -193,6 +203,7 @@ exports.deleteCourse = async (req, res, next) => {
       });
     }
 
+    await awsImageService.deleteFile(imageKey);
     res.status(200).json({
       message: 'Course deleted',
     });
