@@ -134,7 +134,7 @@ exports.updateUserProfile = async (req, res, next) => {
     const value = req.body[key];
     if (value != null) {
       if (key === 'birthday') {
-        updateOps[key] = new Date(value);
+        updateOps[key] = new Date(+value);
       } else {
         updateOps[key] = req.body[key];
       }

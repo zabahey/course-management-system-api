@@ -25,6 +25,13 @@ router.get(
   CoursesController.getCourseById
 );
 
+router.patch(
+  '/:id',
+  validateObjectIdParam(),
+  courseValidator(),
+  CoursesController.updateCourse
+);
+
 router.delete(
   '/:id',
   authenticate,

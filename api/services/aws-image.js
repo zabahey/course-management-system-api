@@ -45,7 +45,6 @@ const deleteFile = async (key) => {
         Key: key,
       })
       .promise();
-    console.log(result);
   } catch (error) {
     throw new Error(error.message);
   }

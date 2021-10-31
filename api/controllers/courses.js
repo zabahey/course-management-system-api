@@ -214,3 +214,56 @@ exports.deleteCourse = async (req, res, next) => {
     });
   }
 };
+
+exports.updateCourse = async (req, res, next) => {
+  const { sub: userId } = req.user;
+  const { id } = req.params;
+
+  const filter = {
+    instructor: ObjectId(userId),
+    _id: ObjectId(id),
+  };
+
+  const course = await Course.findOne(filter);
+
+  if (!course) {
+    return res.status(404).json({
+      code: 404,
+      message: 'Course not found',
+    });
+  }
+
+  const updateOps = {};
+
+  for (const key in req.body) {
+    const value = req.body[key];
+    if (value != null) {
+      if (key === 'startDate' || key === 'endDate') {
+        updateOps[key] = new Date(+value);
+      } else {
+        updateOps[key] = req.body[key];
+      }
+    }
+  }
+
+  if (req.file) {
+    updateOps.image = req.file.location;
+    updateOps.imageKey = req.file.key;
+  }
+
+  const oldImageKey = course.imageKey;
+  await Course.updateOne(
+    filter,
+    {
+      $set: updateOps,
+    },
+    { upsert: true, runValidators: true }
+  );
+  if (updateOps.imageKey && oldImageKey) {
+    await awsImageService.deleteFile(oldImageKey);
+  }
+
+  res.status(200).json({
+    message: 'Course updated',
+  });
+};
